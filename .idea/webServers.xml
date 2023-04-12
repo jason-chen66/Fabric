@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="a7ac4d72-f42a-43ec-b806-423ebcb6276a" name="fabric">
+        <fileTransfer rootFolder="/home/ubuntu" accessType="SFTP" host="192.168.24.128" port="22" sshConfigId="15737fb9-d80e-4372-a36e-2fa8c11a4d92" sshConfig="ubuntu@192.168.24.128:22:22 password">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" keepAliveTimeout="0" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
