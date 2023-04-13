@@ -2,6 +2,7 @@ package org.example;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Set;
 
 import io.ipfs.api.IPFS;
 import org.hyperledger.fabric.gateway.Contract;
@@ -51,18 +52,48 @@ public class ClientApp {
 
     public static void main(String[] args) throws Exception {
         ClientApp clientApp = new ClientApp();
-        clientApp.createNFT("user2","src/main/resources/NFTs/architecture_31.jpg","architecture_31.jpg");
+//        clientApp.createNFT("user2","src/main/resources/NFTs/architecture_31.jpg","architecture_31.jpg");
     }
 
 
-    public void createNFT(String loginUser,String filePath,String fileName) throws Exception {
+    public String createNFT(String loginUser, String filePath, String fileName, Set<String> owners) throws Exception {
         Contract contract = this.parseContract(loginUser);
         IPFS ipfs = new IPFS("/ip4/127.0.0.1/tcp/5001");
         IPFSUtil ipfsUtil = new IPFSUtil();
-        String cid = ipfsUtil.upload(ipfs,filePath);
+        String hash = ipfsUtil.upload(ipfs,filePath);
         FileFingerUtil fileFingerUtil = new FileFingerUtil();
         String finger = fileFingerUtil.SHA_256(fileName);
-        System.out.println(cid);
-//        contract.submitTransaction("createNFT",cid,loginUser,finger);
+        System.out.println(hash);
+        RandomIdGenerator randomIdGenerator = new RandomIdGenerator();
+        String NFTId = randomIdGenerator.generateId();
+        StringBuilder  ownersBuilder = new StringBuilder();
+        for (String owner : owners) {
+            ownersBuilder.append(owner).append(",");
+        }
+        contract.submitTransaction("createNFT",NFTId,hash,loginUser,finger,ownersBuilder.toString(),fileName);
+        return NFTId;
+    }
+    public String queryNFT(String loginUser, String NFTId) throws Exception {
+        Contract contract = this.parseContract(loginUser);
+        byte[] result = contract.evaluateTransaction("queryNFT", loginUser, NFTId);
+        //从result获取到hash，然后从ipfs下载文件
+        String hash = "result";
+        IPFS ipfs = new IPFS("/ip4/127.0.0.1/tcp/5001");
+        IPFSUtil ipfsUtil = new IPFSUtil();
+        ipfsUtil.download(ipfs,hash);
+        //下载后可以传给前端
+
+        return new String(result);
+    }
+
+    public String queryAllNFTs(String loginUser) throws Exception {
+        Contract contract = this.parseContract(loginUser);
+        byte[] result = contract.evaluateTransaction("queryAllNFTs", loginUser);
+        return new String(result);
+    }
+
+    public void changeNFTOwner(String NFTId, String loginUser, String newOwner) throws Exception {
+        Contract contract = this.parseContract(loginUser);
+        contract.submitTransaction("changeNFTOwner", NFTId, loginUser, newOwner);
     }
 }
