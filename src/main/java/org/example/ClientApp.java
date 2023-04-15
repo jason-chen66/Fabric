@@ -4,6 +4,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Set;
 
+import com.google.type.DateTime;
 import io.ipfs.api.IPFS;
 import org.hyperledger.fabric.gateway.Contract;
 import org.hyperledger.fabric.gateway.Gateway;
@@ -55,7 +56,7 @@ public class ClientApp {
 //        clientApp.createNFT("user2","src/main/resources/NFTs/architecture_31.jpg","architecture_31.jpg");
     }
 
-
+    //创建NFT
     public String createNFT(String loginUser, String filePath, String fileName, Set<String> owners) throws Exception {
         Contract contract = this.parseContract(loginUser);
         IPFS ipfs = new IPFS("/ip4/127.0.0.1/tcp/5001");
@@ -70,12 +71,16 @@ public class ClientApp {
         for (String owner : owners) {
             ownersBuilder.append(owner).append(",");
         }
-        contract.submitTransaction("createNFT",NFTId,hash,loginUser,finger,ownersBuilder.toString(),fileName);
+        //获取当前时间并转为string
+        DateTime dateTime = DateTime.newBuilder().build();
+        String time = dateTime.toString();
+        contract.submitTransaction("publish",loginUser,NFTId,time ,ownersBuilder.toString(),fileName,"description",finger,hash,"watermark"+NFTId);
         return NFTId;
     }
+    //查询NFT
     public String queryNFT(String loginUser, String NFTId) throws Exception {
         Contract contract = this.parseContract(loginUser);
-        byte[] result = contract.evaluateTransaction("queryNFT", loginUser, NFTId);
+        byte[] result = contract.evaluateTransaction("queryNFT", NFTId);
         //从result获取到hash，然后从ipfs下载文件
         String hash = "result";
         IPFS ipfs = new IPFS("/ip4/127.0.0.1/tcp/5001");
@@ -86,14 +91,23 @@ public class ClientApp {
         return new String(result);
     }
 
-    public String queryAllNFTs(String loginUser) throws Exception {
-        Contract contract = this.parseContract(loginUser);
-        byte[] result = contract.evaluateTransaction("queryAllNFTs", loginUser);
-        return new String(result);
-    }
-
-    public void changeNFTOwner(String NFTId, String loginUser, String newOwner) throws Exception {
+    //转移所有权
+    public void transferOwnership(String NFTId, String loginUser, String newOwner) throws Exception {
         Contract contract = this.parseContract(loginUser);
         contract.submitTransaction("changeNFTOwner", NFTId, loginUser, newOwner);
     }
+
+    //授予使用权
+    public void grantAccess(String NFTId,String loginUser, String newAccessUser) throws Exception {
+        Contract contract = this.parseContract(loginUser);
+        contract.submitTransaction("grantAccess", NFTId, loginUser, newAccessUser);
+    }
+
+    //撤销使用权
+    public void revokeAccess(String NFTId,String loginUser, String revokeAccessUser) throws Exception {
+        Contract contract = this.parseContract(loginUser);
+        contract.submitTransaction("revokeAccess", NFTId, loginUser, revokeAccessUser);
+    }
+
+
 }
