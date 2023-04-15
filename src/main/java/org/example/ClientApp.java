@@ -56,6 +56,9 @@ public class ClientApp {
     }
 
 
+    /**
+     * 使用文件路径的版本
+     */
     public String createNFT(String loginUser, String filePath, String fileName, Set<String> owners) throws Exception {
         Contract contract = this.parseContract(loginUser);
         IPFS ipfs = new IPFS("/ip4/127.0.0.1/tcp/5001");
@@ -73,6 +76,30 @@ public class ClientApp {
         contract.submitTransaction("createNFT",NFTId,hash,loginUser,finger,ownersBuilder.toString(),fileName);
         return NFTId;
     }
+
+    /**
+     * 使用文件字节流的版本
+     * @modified ChentaoZhang
+     */
+    public String createNFT(String loginUser, byte[] data, String fileName, Set<String> owners) throws Exception {
+        Contract contract = this.parseContract(loginUser);
+        IPFS ipfs = new IPFS("/ip4/127.0.0.1/tcp/5001");
+        IPFSUtil ipfsUtil = new IPFSUtil();
+        String hash = ipfsUtil.upload(ipfs, data);
+        FileFingerUtil fileFingerUtil = new FileFingerUtil();
+        String finger = fileFingerUtil.SHA_256(fileName);
+        System.out.println(hash);
+        RandomIdGenerator randomIdGenerator = new RandomIdGenerator();
+        String NFTId = randomIdGenerator.generateId();
+        StringBuilder  ownersBuilder = new StringBuilder();
+        for (String owner : owners) {
+            ownersBuilder.append(owner).append(",");
+        }
+        contract.submitTransaction("createNFT",NFTId,hash,loginUser,finger,ownersBuilder.toString(),fileName);
+        return NFTId;
+    }
+
+
     public String queryNFT(String loginUser, String NFTId) throws Exception {
         Contract contract = this.parseContract(loginUser);
         byte[] result = contract.evaluateTransaction("queryNFT", loginUser, NFTId);

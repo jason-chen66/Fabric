@@ -1,0 +1,55 @@
+use blockchain;
+DROP TABLE IF EXISTS `work`;
+CREATE TABLE blockchain.`work` (
+	id BIGINT auto_increment NOT null, 
+	work_name varchar(128) COLLATE utf8mb4_general_ci NOT NULL,
+	work_description varchar(128) COLLATE utf8mb4_general_ci NOT NULL,
+	work_category int NOT null,
+	finish_time varchar(128) COLLATE utf8mb4_general_ci NOT NULL,
+	finish_place varchar(128) COLLATE utf8mb4_general_ci NOT NULL,
+	publish_status int NOT null,
+	rights_obtain int NOT null,
+	work_nature int NOT null,
+	public_notice int NOT null,
+	right_belonging int NOT null,
+	update_time int NOT null,
+	status int NOT null,
+	main_author_id bigint NOT null,
+	PRIMARY KEY (`id`)
+)
+ENGINE=InnoDB
+DEFAULT CHARSET=utf8mb4
+COLLATE=utf8mb4_0900_ai_ci;
+
+DROP TABLE IF EXISTS `work_author`;
+CREATE TABLE blockchain.`work_author` (
+	id BIGINT auto_increment NOT null, 
+	work_id BIGINT NOT null, 
+	author_id BIGINT NOT null, 
+	PRIMARY KEY (`id`)
+)
+ENGINE=InnoDB
+DEFAULT CHARSET=utf8mb4
+COLLATE=utf8mb4_0900_ai_ci;
+
+DROP TABLE IF EXISTS `author`;
+CREATE TABLE blockchain.`author` (
+	id BIGINT auto_increment NOT null, 
+	author_category int NOT null,
+	author_name varchar(128) COLLATE utf8mb4_general_ci NOT NULL,
+	signature int NOT null,
+	author_rights int NOT null,
+	PRIMARY KEY (`id`)
+)
+DROP TABLE IF EXISTS `user`;
+CREATE TABLE blockchain.`user` (
+	id BIGINT auto_increment NOT null, 
+	login_name  varchar(128) COLLATE utf8mb4_general_ci NOT NULL,
+	`password`  varchar(128) COLLATE utf8mb4_general_ci NOT NULL,
+	mobile  varchar(128) COLLATE utf8mb4_general_ci,
+	author_id BIGINT, 
+	PRIMARY KEY (`id`)
+)
+ENGINE=InnoDB
+DEFAULT CHARSET=utf8mb4
+COLLATE=utf8mb4_0900_ai_ci;
