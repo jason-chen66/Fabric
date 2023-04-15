@@ -1,6 +1,7 @@
 package org.hyperledger.fabric.samples.fabnft;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -35,14 +36,17 @@ public class NFTContract implements ContractInterface {
     }
 
     @Transaction()
-    public NFT publish(NFTContext ctx, String publisher, String nftNumber, String publishDateTime, List<String> owners, String name, String description, String fileFinger, String IPFSHash, String watermark) {
+    public NFT publish(NFTContext ctx, String publisher, String nftNumber, String publishDateTime, String owners, String name, String description, String fileFinger, String IPFSHash, String watermark) {
         System.out.println(ctx);
 
         if (queryNFT(ctx, nftNumber) != null) {
             throw new ChaincodeException("NFT " + nftNumber + " already exists");
         }
 
-        NFT nft = NFT.createInstance(publisher, nftNumber, publishDateTime, owners, owners, name, description, fileFinger, IPFSHash, watermark);
+        List<String> ownerList = new ArrayList<String>();
+        Arrays.stream(owners.split(",")).forEach(owner -> ownerList.add(owner));
+
+        NFT nft = NFT.createInstance(publisher, nftNumber, publishDateTime, ownerList, ownerList, name, description, fileFinger, IPFSHash, watermark);
 
         System.out.println(nft);
 

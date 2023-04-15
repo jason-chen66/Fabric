@@ -21,7 +21,7 @@ public class NFTContractTest {
         String publisher = "publisher";
         String nftNumber = "nft001";
         String publishDateTime = "2023-04-15T10:00:00.000Z";
-        List<String> owners = Arrays.asList("owner1", "owner2");
+        String owners = "owner1,owner2";
         String name = "nft name";
         String description = "nft description";
         String fileFinger = "file finger";
@@ -48,7 +48,7 @@ public class NFTContractTest {
         String publisher = "publisher";
         String nftNumber = "nft001";
         String publishDateTime = "2023-04-15T10:00:00.000Z";
-        List<String> owners = Arrays.asList("owner1", "owner2");
+        String owners = "owner1,owner2";
         String name = "nft name";
         String description = "nft description";
         String fileFinger = "file finger";
@@ -65,7 +65,7 @@ public class NFTContractTest {
         String publisher = "publisher";
         String nftNumber = "nft001";
         String publishDateTime = "2023-04-15T10:00:00.000Z";
-        List<String> owners = Arrays.asList("owner1", "owner2");
+        String owners = "owner1,owner2";
         String name = "nft name";
         String description = "nft description";
         String fileFinger = "file finger";
@@ -82,7 +82,7 @@ public class NFTContractTest {
         String publisher = "publisher";
         String nftNumber = "nft001";
         String publishDateTime = "2023-04-15T10:00:00.000Z";
-        List<String> owners = Arrays.asList("owner1", "owner2");
+        String owners = "owner1,owner2";
         String name = "nft name";
         String description = "nft description";
         String fileFinger = "file finger";
@@ -99,7 +99,7 @@ public class NFTContractTest {
         String publisher = "publisher";
         String nftNumber = "nft001";
         String publishDateTime = "2023-04-15T10:00:00.000Z";
-        List<String> owners = Arrays.asList("owner1", "owner2");
+        String owners = "owner1,owner2";
         String name = "nft name";
         String description = "nft description";
         String fileFinger = "file finger";
