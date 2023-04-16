@@ -99,6 +99,9 @@ public class ClientApp {
         for (String owner : owners) {
             ownersBuilder.append(owner).append(",");
         }
+        //获取当前时间并转为string
+        DateTime dateTime = DateTime.newBuilder().build();
+        String time = dateTime.toString();
         contract.submitTransaction("createNFT",NFTId,hash,loginUser,finger,ownersBuilder.toString(),fileName);
         return NFTId;
     }
